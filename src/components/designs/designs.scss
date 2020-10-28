@@ -1,0 +1,19 @@
+.homeLeftDiv {
+  height: 99vh;
+  background: #1939B7;
+}
+
+.homeRightDiv {
+  padding: 120px 0;
+  display: flex;
+  justify-content: center;
+
+  label {
+    color: #181c32;
+    font-weight: 600;
+  }
+}
+
+.form-control {
+  height: 50px;
+}

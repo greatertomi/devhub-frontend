@@ -1,11 +1,11 @@
 import React from "react";
 import './App.css';
+import Home from './components/designs/Home';
 
 const App = () => {
   return (
     <div className="App">
-      Here we are
-      <button className="btn btn-primary">Welcome</button>
+      <Home/>
     </div>
   );
 };
