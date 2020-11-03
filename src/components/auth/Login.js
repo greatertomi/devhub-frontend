@@ -1,7 +1,7 @@
 import React from 'react';
 /*import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faGuitar} from '@fortawesome/free-solid-svg-icons';*/
-import './auth.scss'
+import '../styles/auth.scss'
 import {Link} from 'react-router-dom';
 import Home from '../designs/Home';
 

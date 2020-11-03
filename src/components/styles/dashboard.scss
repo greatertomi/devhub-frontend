@@ -1,0 +1,16 @@
+.body {
+  background: #f6f8fa;
+  height: 100vh;
+}
+
+.userPicture {
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+}
+
+.postHeader {
+  display: flex;
+  align-items: center;
+  margin-top: -20px;
+}
