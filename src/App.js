@@ -1,10 +1,8 @@
 import React from "react";
 import './App.css';
-import Home from './components/designs/Home';
 import { BrowserRouter, Route} from 'react-router-dom';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-
 
 const App = () => {
   return (
