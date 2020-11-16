@@ -1,13 +1,19 @@
 import React, {Component} from 'react';
-import Post from './Post';
-import Navbar from '../designs/Navbar';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import {connect} from 'react-redux';
+import {fetchAllUsers} from '../../actions';
 
 import "../styles/dashboard.scss"
+import Post from './Post';
+import Navbar from '../designs/Navbar';
 
 class Index extends Component {
   state = {show: false};
+
+  componentDidMount() {
+    this.props.fetchAllUsers();
+  }
 
   handleClose = () => {
     this.setState({show: false});
@@ -52,4 +58,8 @@ class Index extends Component {
   }
 }
 
-export default Index;
+const mapStateToProps = ({auth}) => {
+  return {users: auth}
+};
+
+export default connect(mapStateToProps, {fetchAllUsers})(Index);
