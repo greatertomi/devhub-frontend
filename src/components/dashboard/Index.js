@@ -32,7 +32,7 @@ class Index extends Component {
             <div className="col-md-8">
               <Post/>
             </div>
-            <div className="col-md-4 pt-4 widgetDiv">
+            <div className="col-md-3 pt-4">
               <button className="btn btn-primary btn-lg" onClick={this.handleOpen}>Say Something</button>
             </div>
           </div>

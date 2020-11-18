@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import Home from '../designs/Home';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux'
 import {registerUser} from '../../actions';
+import Alert from "react-bootstrap/Alert";
 
 class Register extends Component {
   state = {
@@ -10,7 +11,8 @@ class Register extends Component {
     email: '',
     password: '',
     password2: '',
-    githubLink: ''
+    githubLink: '',
+    showAlert: false
   };
 
   onChange = e => {
@@ -20,10 +22,25 @@ class Register extends Component {
     })
   };
 
+  hideAlert = () => {
+    this.setState({
+      showAlert: false
+    })
+  }
+
+  getSuccessMessage = () => {
+    const {auth} = this.props;
+    if (auth.message) {
+      this.setState({
+        showAlert: true
+      })
+    }
+  }
+
   onFormSubmit = e => {
     e.preventDefault();
     this.props.registerUser(this.state);
-    // console.log(this.state)
+    this.getSuccessMessage();
   };
 
   render() {
@@ -66,11 +83,13 @@ class Register extends Component {
                   <input type="text" name="githubLink" className="form-control" placeholder="Github profile link"
                          value={githubLink} onChange={this.onChange}/>
                 </div>
+                {this.state.showAlert && <Alert variant="success" dismissible>Account created!</Alert>}
                 <div className="form-inline">
                   <button type="submit" className="btn btn-primary mr-2">Submit</button>
                   <Link className="btn btn-outline-danger" to="/login">
                     Cancel
                   </Link>
+                  <button className="btn btn-primary">Navigate</button>
                 </div>
               </form>
             </div>
