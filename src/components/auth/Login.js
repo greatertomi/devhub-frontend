@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import {faGuitar} from '@fortawesome/free-solid-svg-icons';*/
 import '../styles/auth.scss'
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux'
+import {loginUser} from "../../actions";
 import Home from '../designs/Home';
 import Alert from "react-bootstrap/Alert";
 
@@ -22,9 +24,10 @@ class Login extends Component{
     })
   }
 
-  onSubmit = e => {
+  onSubmit = async e => {
     e.preventDefault();
-    console.log(this.state);
+    await this.props.loginUser(this.state)
+    console.log('sC', this.props)
   }
 
   render() {
@@ -74,4 +77,9 @@ class Login extends Component{
   }
 }
 
-export default Login;
+const mapStateToProps = ({auth}) => {
+  console.log('mSTP', auth)
+  return {auth}
+}
+
+export default connect(mapStateToProps, {loginUser})(Login);

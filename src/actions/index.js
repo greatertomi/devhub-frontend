@@ -16,5 +16,7 @@ export const registerUser = userDetails => async dispatch => {
 
 export const loginUser = userDetails => async dispatch => {
   const res = axios.post(`${baseUrl}/users/login`, userDetails)
-  dispatch({type: LOGIN_USER, payload: res.data})
+  console.log(res)
+  console.log(res.data)
+  // dispatch({type: LOGIN_USER, payload: res.data})
 }
