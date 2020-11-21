@@ -5,3 +5,7 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.validationError {
+  color: #c72b2b;
+}

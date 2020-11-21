@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import Home from '../designs/Home';
-import {Link, withRouter} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {connect} from 'react-redux'
 import {registerUser} from '../../actions';
 import Alert from "react-bootstrap/Alert";
+import {Redirect} from 'react-router-dom';
 
 class Register extends Component {
   state = {
@@ -12,7 +13,9 @@ class Register extends Component {
     password: '',
     password2: '',
     githubLink: '',
-    showAlert: false
+    showAlert: false,
+    alertMessage: null,
+    redirect: false,
   };
 
   onChange = e => {
@@ -22,29 +25,49 @@ class Register extends Component {
     })
   };
 
-  hideAlert = () => {
-    this.setState({
-      showAlert: false
-    })
-  }
 
   getSuccessMessage = () => {
     const {auth} = this.props;
-    if (auth.message) {
+    if (auth) {
       this.setState({
-        showAlert: true
+        redirect: true
+      })
+    } else {
+      this.setState({
+        showAlert: true,
+        alertMessage: 'An error have occurred.'
       })
     }
   }
 
-  onFormSubmit = e => {
+  onFormSubmit = async e => {
     e.preventDefault();
-    this.props.registerUser(this.state);
+    const {
+      fullName,
+      email,
+      password,
+      password2,
+      githubLink,
+    } = this.state;
+
+    const formValues = {fullName, email, password, password2, githubLink}
+    await this.props.registerUser(formValues);
     this.getSuccessMessage();
   };
 
   render() {
-    const {fullName, email, password, password2, githubLink} = this.state;
+    const {
+      fullName,
+      email,
+      password,
+      password2,
+      githubLink,
+      alertMessage
+    } = this.state;
+
+    if (this.state.redirect) {
+      return <Redirect to='/login?register=success' />
+    }
     return (
       <div className="row">
         <div className="col-md-4">
@@ -83,13 +106,12 @@ class Register extends Component {
                   <input type="text" name="githubLink" className="form-control" placeholder="Github profile link"
                          value={githubLink} onChange={this.onChange}/>
                 </div>
-                {this.state.showAlert && <Alert variant="success" dismissible>Account created!</Alert>}
+                {this.state.showAlert && <Alert variant="success" dismissible>{alertMessage}</Alert>}
                 <div className="form-inline">
                   <button type="submit" className="btn btn-primary mr-2">Submit</button>
                   <Link className="btn btn-outline-danger" to="/login">
                     Cancel
                   </Link>
-                  <button className="btn btn-primary">Navigate</button>
                 </div>
               </form>
             </div>
