@@ -15,8 +15,11 @@ export const registerUser = userDetails => async dispatch => {
 };
 
 export const loginUser = userDetails => async dispatch => {
-  const res = axios.post(`${baseUrl}/users/login`, userDetails)
-  console.log(res)
-  console.log(res.data)
-  // dispatch({type: LOGIN_USER, payload: res.data})
+  const res = await axios.post(`${baseUrl}/users/login`, userDetails)
+  const {token, _id} = res.data;
+  if (token) {
+    localStorage.setItem('authToken', token);
+    localStorage.setItem('userId', _id);
+  }
+  dispatch({type: LOGIN_USER, payload: res.data})
 }
