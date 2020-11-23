@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 /*import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faGuitar} from '@fortawesome/free-solid-svg-icons';*/
 import '../styles/auth.scss'
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux'
 import {loginUser} from "../../actions";
 import Home from '../designs/Home';
@@ -11,7 +11,10 @@ import Alert from "react-bootstrap/Alert";
 class Login extends Component{
   state = {
     email: '',
-    reqPassword: ''
+    reqPassword: '',
+    authError: false,
+    errorMsg: null,
+    authSuccess: false
   }
 
   query = new URLSearchParams(this.props.location.search);
@@ -26,12 +29,30 @@ class Login extends Component{
 
   onSubmit = async e => {
     e.preventDefault();
-    await this.props.loginUser(this.state)
-    console.log('sC', this.props)
+    const {email, reqPassword} = this.state;
+    await this.props.loginUser({email, reqPassword})
+    if (this.props.auth) {
+      this.setState({
+        authSuccess: true
+      })
+    } else if (this.props.errors) {
+      this.setState({
+        authError: true,
+        errorMsg: 'Auth Failed!'
+      })
+    } else {
+      this.setState({
+        authError: true,
+        errorMsg: `An error occurred. But we don't know why`
+      })
+    }
   }
 
   render() {
-    const {email, reqPassword} = this.state;
+    const {email, reqPassword, authError, authSuccess, errorMsg} = this.state;
+    if (authSuccess) {
+      return <Redirect to='/dashboard' />
+    }
     return (
       <div className="row">
         <div className="col-md-4">
@@ -48,6 +69,7 @@ class Login extends Component{
               {this.successMsg === 'success' &&
                 <Alert variant="success">Registration successful! Please Login.</Alert>
               }
+              {authError && <Alert variant="danger">{errorMsg}</Alert>}
             </div>
             <form className="mt-4" onSubmit={this.onSubmit}>
               <div className="form-group">
@@ -77,9 +99,8 @@ class Login extends Component{
   }
 }
 
-const mapStateToProps = ({auth}) => {
-  console.log('mSTP', auth)
-  return {auth}
+const mapStateToProps = ({auth, errors}) => {
+  return {auth, errors}
 }
 
 export default connect(mapStateToProps, {loginUser})(Login);

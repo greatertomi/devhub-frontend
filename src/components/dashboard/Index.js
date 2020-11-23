@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import {connect} from 'react-redux';
-import {fetchAllUsers} from '../../actions';
+import {fetchAllUsers, authTest} from '../../actions';
 
 import "../styles/dashboard.scss"
 import Post from './Post';
@@ -23,6 +23,10 @@ class Index extends Component {
     this.setState({show: true});
   };
 
+  testAuth = () => {
+    this.props.authTest();
+  }
+
   render() {
     return (
       <div className="body">
@@ -34,6 +38,7 @@ class Index extends Component {
             </div>
             <div className="col-md-3 pt-4">
               <button className="btn btn-primary btn-lg" onClick={this.handleOpen}>Say Something</button>
+              <button className="btn btn-dark" onClick={this.testAuth}>Pull</button>
             </div>
           </div>
         </div>
@@ -62,4 +67,4 @@ const mapStateToProps = ({auth}) => {
   return {users: auth}
 };
 
-export default connect(mapStateToProps, {fetchAllUsers})(Index);
+export default connect(mapStateToProps, {fetchAllUsers, authTest})(Index);
