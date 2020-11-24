@@ -50,7 +50,7 @@ class Login extends Component{
 
   render() {
     const {email, reqPassword, authError, authSuccess, errorMsg} = this.state;
-    if (authSuccess) {
+    if (authSuccess || !!localStorage.getItem('authToken')) {
       return <Redirect to='/dashboard' />
     }
     return (

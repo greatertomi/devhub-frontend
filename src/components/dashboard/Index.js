@@ -7,6 +7,7 @@ import {fetchAllUsers, authTest} from '../../actions';
 import "../styles/dashboard.scss"
 import Post from './Post';
 import Navbar from '../designs/Navbar';
+import {Redirect} from "react-router-dom";
 
 class Index extends Component {
   state = {show: false};
@@ -28,6 +29,10 @@ class Index extends Component {
   }
 
   render() {
+    if (!!localStorage.getItem('authToken') === false) {
+      return <Redirect to='/login' />
+    }
+
     return (
       <div className="body">
         <Navbar />
