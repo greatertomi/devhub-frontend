@@ -6,7 +6,7 @@ import john from '../../images/john.jpg'
 import { faHeart, faComment } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-const Post = () => {
+const Post = ({postText}) => {
   return (
     <div className="card mt-4">
       <div className="card-body">
@@ -20,9 +20,7 @@ const Post = () => {
           </div>
         </div>
         <div className="pt-2">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid consequatur
-          dicta id iure libero neque optio suscipit ut vel voluptas. Aliquid assumenda,
-          aut dignissimos hic itaque nulla praesentium quasi velit.
+          {postText}
         </div>
         <div className="mt-3 d-flex">
           <div>

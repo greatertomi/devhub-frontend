@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import {connect} from 'react-redux';
-import {fetchAllUsers, fetchAllPosts} from '../../actions';
+import {fetchAllUsers, fetchAllPosts, createPost} from '../../actions';
 
 import "../styles/dashboard.scss"
 import Post from './Post';
@@ -12,13 +12,17 @@ class Index extends Component {
   state = {
     show: false,
     postText: '',
-    posts: null
+    posts: []
   };
 
   async componentDidMount() {
-    // this.props.fetchAllUsers();
     const userId = localStorage.getItem('userId');
     await this.props.fetchAllPosts(userId);
+    // console.log(this.props.posts)
+    this.getCurrentPosts();
+  }
+
+  getCurrentPosts = () => {
     this.setState({
       posts: this.props.posts
     })
@@ -39,7 +43,7 @@ class Index extends Component {
     })
   }
 
-  onPostSubmit = e => {
+  onPostSubmit = async e => {
     e.preventDefault();
     this.handleClose();
     const userId = localStorage.getItem('userId')
@@ -47,19 +51,22 @@ class Index extends Component {
       userId,
       post: this.state.postText
     }
-    console.log(postDetail)
+    await this.props.createPost(postDetail)
+    this.getCurrentPosts();
   }
 
 
   render() {
-    // const {posts} = this.state;
+    const posts = this.state.posts.map(post =>
+      <Post key={post._id} postText={post.post} />)
     return (
       <div className="body">
         <Navbar />
         <div className="container">
           <div className="row">
             <div className="col-md-8">
-              <Post/>
+              {/*<Post/>*/}
+              {posts}
             </div>
             <div className="col-md-3 pt-4">
               <button className="btn btn-primary btn-lg" onClick={this.handleOpen}>Say Something</button>
@@ -92,4 +99,7 @@ const mapStateToProps = ({auth, posts}) => {
   return {users: auth, posts}
 };
 
-export default connect(mapStateToProps, {fetchAllUsers, fetchAllPosts})(Index);
+export default connect(mapStateToProps, {
+  fetchAllUsers,
+  fetchAllPosts,
+  createPost})(Index);
