@@ -3,3 +3,4 @@ export const REGISTER_USER = 'register_user';
 export const LOGIN_USER = 'login_user';
 export const AUTH_ERROR = 'add_error';
 export const REMOVE_ERROR = 'remove_error';
+export const FETCH_POSTS = 'fetch_posts'

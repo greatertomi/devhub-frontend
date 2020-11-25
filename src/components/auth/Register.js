@@ -25,7 +25,6 @@ class Register extends Component {
     })
   };
 
-
   getSuccessMessage = () => {
     const {auth} = this.props;
     if (auth) {
