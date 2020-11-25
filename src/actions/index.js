@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {AUTH_ERROR, FETCH_USER, LOGIN_USER, REGISTER_USER} from './types';
+import {AUTH_ERROR, FETCH_POSTS, FETCH_USER, LOGIN_USER, REGISTER_USER} from './types';
 
 const baseUrl = 'http://localhost:5000/api/v1';
 
@@ -31,12 +31,35 @@ export const loginUser = userDetails => async dispatch => {
   }
 }
 
-export const authTest = () => async dispatch => {
+export const createPost = postDetails => async dispatch => {
   const token = localStorage.getItem('authToken');
+  try {
+    const res = await axios.post(`${baseUrl}/posts/create`, postDetails, {
+      headers: {
+        'x-access-token': token
+      }
+    })
+    dispatch({type: FETCH_POSTS, payload: res.data})
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export const fetchAllPosts = userId => async dispatch => {
+  const token = localStorage.getItem('authToken');
+  const res = await axios.get(`${baseUrl}/posts/${userId}`, {
+    headers: {
+      'x-access-token': token
+    }
+  })
+  dispatch({type: FETCH_POSTS, payload: res.data})
+}
+
+/*export const authTest = () => async dispatch => {
   const res = await axios.get(`${baseUrl}/users/authTest`, {
     headers: {
       'x-access-token': token
     }
   })
   console.log(res.data)
-}
+}*/

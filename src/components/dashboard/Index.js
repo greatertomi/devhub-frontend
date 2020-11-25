@@ -2,17 +2,26 @@ import React, {Component} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import {connect} from 'react-redux';
-import {fetchAllUsers, authTest} from '../../actions';
+import {fetchAllUsers, fetchAllPosts} from '../../actions';
 
 import "../styles/dashboard.scss"
 import Post from './Post';
 import Navbar from '../designs/Navbar';
 
 class Index extends Component {
-  state = {show: false};
+  state = {
+    show: false,
+    postText: '',
+    posts: null
+  };
 
-  componentDidMount() {
-    this.props.fetchAllUsers();
+  async componentDidMount() {
+    // this.props.fetchAllUsers();
+    const userId = localStorage.getItem('userId');
+    await this.props.fetchAllPosts(userId);
+    this.setState({
+      posts: this.props.posts
+    })
   }
 
   handleClose = () => {
@@ -23,11 +32,27 @@ class Index extends Component {
     this.setState({show: true});
   };
 
-  testAuth = () => {
-    this.props.authTest();
+  onPostChange = e => {
+    const {name, value} = e.target;
+    this.setState({
+      [name]: value
+    })
   }
 
+  onPostSubmit = e => {
+    e.preventDefault();
+    this.handleClose();
+    const userId = localStorage.getItem('userId')
+    const postDetail = {
+      userId,
+      post: this.state.postText
+    }
+    console.log(postDetail)
+  }
+
+
   render() {
+    // const {posts} = this.state;
     return (
       <div className="body">
         <Navbar />
@@ -38,7 +63,6 @@ class Index extends Component {
             </div>
             <div className="col-md-3 pt-4">
               <button className="btn btn-primary btn-lg" onClick={this.handleOpen}>Say Something</button>
-              <button className="btn btn-dark" onClick={this.testAuth}>Pull</button>
             </div>
           </div>
         </div>
@@ -47,13 +71,14 @@ class Index extends Component {
             <Modal.Title>Your Thoughts</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <textarea className="form-control" placeholder="Share something"/>
+            <textarea className="form-control" placeholder="Share something" value={this.state.postText}
+              onChange={this.onPostChange} name="postText"/>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={this.handleClose}>
               Cancel
             </Button>
-            <Button variant="primary" onClick={this.handleClose}>
+            <Button variant="primary" onClick={this.onPostSubmit}>
               Post
             </Button>
           </Modal.Footer>
@@ -63,8 +88,8 @@ class Index extends Component {
   }
 }
 
-const mapStateToProps = ({auth}) => {
-  return {users: auth}
+const mapStateToProps = ({auth, posts}) => {
+  return {users: auth, posts}
 };
 
-export default connect(mapStateToProps, {fetchAllUsers, authTest})(Index);
+export default connect(mapStateToProps, {fetchAllUsers, fetchAllPosts})(Index);
