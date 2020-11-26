@@ -5,9 +5,18 @@ const baseUrl = 'http://localhost:5000/api/v1';
 
 export const fetchAllUsers = () => async dispatch => {
   const res = await axios.get(`${baseUrl}/users`);
-
   dispatch({type: FETCH_USER, payload: res.data})
 };
+
+export const fetchAllPosts = () => async dispatch => {
+  const token = localStorage.getItem('authToken');
+  const res = await axios.get(`${baseUrl}/posts`, {
+    headers: {
+      'x-access-token': token
+    }
+  })
+  dispatch({type: FETCH_POSTS, payload: res.data})
+}
 
 export const registerUser = userDetails => async dispatch => {
   const res = await axios.post(`${baseUrl}/users`, userDetails);
@@ -17,10 +26,11 @@ export const registerUser = userDetails => async dispatch => {
 export const loginUser = userDetails => async dispatch => {
   try {
     const res = await axios.post(`${baseUrl}/users/login`, userDetails)
-    const {token, _id} = res.data;
+    const {token, _id, fullName} = res.data;
     if (token) {
       localStorage.setItem('authToken', token);
       localStorage.setItem('userId', _id);
+      localStorage.setItem('userName', fullName);
     }
     dispatch({type: LOGIN_USER, payload: res.data})
   } catch (err) {
@@ -45,9 +55,29 @@ export const createPost = postDetails => async dispatch => {
   }
 }
 
-export const fetchAllPosts = userId => async dispatch => {
+export const fetchUserPosts = userId => async dispatch => {
   const token = localStorage.getItem('authToken');
   const res = await axios.get(`${baseUrl}/posts/${userId}`, {
+    headers: {
+      'x-access-token': token
+    }
+  })
+  dispatch({type: FETCH_POSTS, payload: res.data})
+}
+
+export const deletePost = postId => async dispatch => {
+  const token = localStorage.getItem('authToken');
+  const res = await axios.delete(`${baseUrl}/posts/delete/${postId}`, {
+    headers: {
+      'x-access-token': token
+    }
+  })
+  dispatch({type: FETCH_POSTS, payload: res.data})
+}
+
+export const likePost = details => async dispatch => {
+  const token = localStorage.getItem('authToken');
+  const res = await axios.put(`${baseUrl}/posts/like`, details, {
     headers: {
       'x-access-token': token
     }

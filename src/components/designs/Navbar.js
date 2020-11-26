@@ -1,6 +1,14 @@
 import React from 'react';
+import {useHistory} from 'react-router-dom'
 
-const Navbar = () => {
+const Navbar = (props) => {
+  const history = useHistory()
+  const logOut = () => {
+    localStorage.removeItem('userId')
+    localStorage.removeItem('authToken')
+    history.push('/login')
+  }
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <span className="navbar-brand">DevHub</span>
@@ -10,10 +18,10 @@ const Navbar = () => {
       </button>
       <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div className="navbar-nav ml-auto">
-          <span className="nav-item nav-link active">Home <span className="sr-only">(current)</span></span>
+          <span className="nav-item nav-link active">Users</span>
           <span className="nav-item nav-link">Weather</span>
-          <span className="nav-item nav-link">Pricing</span>
-          <span className="nav-item nav-link">Notifs</span>
+          <span className="nav-item nav-link">Profile</span>
+          <span className="nav-item nav-link" onClick={logOut}>Logout</span>
         </div>
       </div>
     </nav>
